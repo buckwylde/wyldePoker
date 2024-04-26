@@ -1,5 +1,5 @@
 namespace wyldePoker {//Hashtable lookup 7 cards
-   public partial class Eval {
+   public partial class HandEvaluator {
       //noflush7[49205]
       private short[] noflush7 = {
         11,  23,  11,  167,  23,  11,  167,  179,

@@ -1,6 +1,8 @@
 namespace wyldePoker {
-   public partial class Eval {
-      #region /* Hand Eval Functions */
+
+   public partial class HandEvaluator {
+      /*** Hand Eval Functions ***/
+      #region /***************************/
 
       public int eval(int[] cards) {
          switch (cards.Length) {
@@ -90,18 +92,18 @@ namespace wyldePoker {
 
          return noflush6[hash];
       }
-      public int eval7(int[] cards) {
-         return evaluate_7cards(cards[0], cards[1], cards[2], cards[3], cards[4], cards[5], cards[6]);
+      public int eval7(Card[] cards) {
+         return evaluate_7cards(cards[0].ID, cards[1].ID, cards[2].ID, cards[3].ID, cards[4].ID, cards[5].ID, cards[6].ID);
       }
       public int evaluate_7cards(int a, int b, int c, int d, int e, int f, int g) {
          int suit_hash = 0;
 
+         suit_hash += SuitHasher[a]; // (2^((a & 0x3) * 3))
          suit_hash += SuitHasher[b]; // (2^((b & 0x3) * 3))
          suit_hash += SuitHasher[c]; // (2^((c & 0x3) * 3))
          suit_hash += SuitHasher[d]; // (2^((d & 0x3) * 3))
          suit_hash += SuitHasher[e]; // (2^((e & 0x3) * 3))
          suit_hash += SuitHasher[f]; // (2^((f & 0x3) * 3))
-         suit_hash += SuitHasher[a]; // (2^((a & 0x3) * 3))
          suit_hash += SuitHasher[g]; // (2^((g & 0x3) * 3))
 
          if (suits[suit_hash] > 0) {
@@ -135,7 +137,8 @@ namespace wyldePoker {
 
       #endregion /* Hand Eval Functions */
 
-      #region /* Rank String Descriptors */
+      /*** Rank String Descriptors ***/
+      #region /*******************************/
       public enum rank_category {
          // FIVE_OF_A_KIND = 0, // Reserved
          STRAIGHT_FLUSH = 1,
@@ -158,11 +161,11 @@ namespace wyldePoker {
          "Straight",
          "Trips",
          "Two Pair",
-         "One Pair",
+         "Pair",
          "High Card",
       };
 
-      private rank_category get_rank_category(int rank) {
+      private rank_category rankCat(int rank) {
          if (rank > 6185) return rank_category.HIGH_CARD;        // 1277 high card
          if (rank > 3325) return rank_category.ONE_PAIR;         // 2860 one pair
          if (rank > 2467) return rank_category.TWO_PAIR;         //  858 two pair
@@ -174,19 +177,24 @@ namespace wyldePoker {
          return rank_category.STRAIGHT_FLUSH;                    //   10 straight-flushes
       }
 
-      public string rankCatDesc(rank_category category) {
-         return rank_category_description[( int )category];//short desc "Flush" "Straight" "Trips"
+      //short desc "Flush" "Straight" "Trips"
+      public string handRank(int rank) {
+         return rank_category_description[( int )rankCat(rank)]; 
       }
-      public string rankDesc(int rank)//long desc "Full House A/J" "K-High Straight" "T-High Flush"
-      {
-         return rank_description[rank, 1];
+
+      //long desc "Full House A/J" "K-High Straight" "T-High Flush"
+      public string handDesc(int rank) {
+         return handRank(rank)+" ("+rank_description[rank, 1]+")";
       }
-      public string handDesc(int rank) //short hand representation "AA882" "5432A" "TTT74"
-      {
+
+      //short hand representation "AA882" "5432A" "TTT74"
+      public string handNote(int rank) {
          return rank_description[rank, 0];
       }
+
+      //returns true/false for flush
       public bool isFlush(int rank) {
-         switch (get_rank_category(rank)) {
+         switch (rankCat(rank)) {
             case rank_category.STRAIGHT_FLUSH:
             case rank_category.FLUSH:
                return true;

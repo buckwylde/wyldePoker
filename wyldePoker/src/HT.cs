@@ -1,5 +1,5 @@
 ﻿namespace wyldePoker {
-   public partial class Eval {
+   public partial class HandEvaluator {
       #region /* Hash Tables */
 
       // returns 2^(cardrank) with cardrank being 0-12[deuce-ace]

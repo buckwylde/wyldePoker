@@ -18,11 +18,10 @@
          "--"
       };
 
-      public int id = 0;
+      private int id = 0;
 
       public Card() { id=0; }
       public Card(int x) { id = x; }
-
       public Card(string name) {
          id = 0;
          switch (name[1]) {
@@ -81,6 +80,7 @@
 
       public override string ToString() { return strCard[id]; }
 
+      public int ID { get => id; }
       public int suit { get => id & 0x3; }
       public int rank { get => id / 4; }
 
