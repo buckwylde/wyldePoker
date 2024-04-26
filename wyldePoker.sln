@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wyldeHoldem", "wyldeHoldem\wyldeHoldem.csproj", "{3AC46458-5921-4F58-87A8-E3E05F15DAA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wyldePoker", "wyldePoker\wyldePoker.csproj", "{896BB2CC-1C18-4978-958C-BF4649A9EC71}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AC46458-5921-4F58-87A8-E3E05F15DAA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AC46458-5921-4F58-87A8-E3E05F15DAA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AC46458-5921-4F58-87A8-E3E05F15DAA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AC46458-5921-4F58-87A8-E3E05F15DAA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{896BB2CC-1C18-4978-958C-BF4649A9EC71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896BB2CC-1C18-4978-958C-BF4649A9EC71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896BB2CC-1C18-4978-958C-BF4649A9EC71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896BB2CC-1C18-4978-958C-BF4649A9EC71}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33D9BF53-349B-4C5D-BCAA-9F55636B6CD9}
+	EndGlobalSection
+EndGlobal
