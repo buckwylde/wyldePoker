@@ -26,15 +26,7 @@ namespace wyldeHoldem {
          }
          sOut = sOut.Trim() + "]\r\n";
 
-         //int r = handEval.evaluate_7cards(mainDeck.cards[0].ID,
-         //                                 mainDeck.cards[1].ID,
-         //                                 mainDeck.cards[2].ID,
-         //                                 mainDeck.cards[3].ID,
-         //                                 mainDeck.cards[4].ID,
-         //                                 mainDeck.cards[5].ID,
-         //                                 mainDeck.cards[6].ID);
-
-         int r = eval.eval7(deck.cards);
+         int r = eval.Eval(deck.cards, 7);
 
          sOut += "["+eval.handNote(r)+"] "+eval.handRank(r)+"\r\n\r\n";
 
