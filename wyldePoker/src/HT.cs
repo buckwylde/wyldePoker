@@ -923,11 +923,12 @@
          int sum = 0;
          const int len = 13;
 
-         for (int i = 0;i < len;i++) {
-            sum += dp[q[i], len - i - 1, k];
+         for (int i = 0;i < len;i++) {       //loops thru all card ranks 0-12
+            sum += dp[q[i], len - i - 1, k]; //dp[how many cards of rank i we have,12-i,#cards being eval'd]
 
+            //statements below provide for an early exit from the loop if we have found all k cards
+            //left over from the C code, probably in an effort for as much speed as possible
             k -= q[i];
-
             if (k <= 0)
                break;
          }

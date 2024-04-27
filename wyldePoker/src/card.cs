@@ -20,7 +20,7 @@
 
       private int id = 0;
 
-      public Card() { id=0; }
+      //constructors
       public Card(int x) { id = x; }
       public Card(string name) {
          id = 0;
@@ -78,11 +78,25 @@
          }
       }
 
+      /// <summary>
+      /// ToString override
+      /// </summary>
+      /// <returns>"Ah" "Ks" "5d" "3c"</returns>
       public override string ToString() { return strCard[id]; }
 
+      /// <summary>
+      /// Readonly property for the int card ID
+      /// </summary>
       public int ID { get => id; }
-      public int suit { get => id & 0x3; }
-      public int rank { get => id / 4; }
 
+      /// <summary>
+      /// Returns int 0-3 for card suit, c,d,h,s 
+      /// </summary>
+      public int Suit { get => id & 0x3; }
+
+      /// <summary>
+      /// Returns int 0-12 for card rank, 2-A
+      /// </summary>
+      public int Rank { get => id / 4; }
    }
 }

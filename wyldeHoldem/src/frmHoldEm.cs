@@ -1,14 +1,24 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing.Text;
+using System.Drawing;
+using System.Reflection.Emit;
+using System.Windows.Forms;
 using wyldePoker;
 
 namespace wyldeHoldem {
    public partial class frmHoldEm : Form {
+
       //cardTable mainTable = new cardTable();
       Deck deck = new Deck();
       HandEvaluator eval = new HandEvaluator();
+      PrivateFontCollection pfc = new PrivateFontCollection();
 
-      public frmHoldEm() {
+      public frmHoldEm() { // constructor
+         
          InitializeComponent();
+
+         pfc.AddFontFile(Application.StartupPath + "\\ComicMono.ttf");
+         textBox1.Font = new Font(pfc.Families[0], 16, FontStyle.Regular);
+
       }
 
       private void frmHoldEm_Load(object sender, System.EventArgs e) {

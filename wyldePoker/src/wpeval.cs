@@ -2,10 +2,17 @@ namespace wyldePoker {
 
    public partial class HandEvaluator {
 
+      /// <summary>
+      /// The hand evaluation function
+      /// </summary>
+      /// <param name="cards">Arrary of card objects to eval</param>
+      /// <param name="count">5 to 7, number of cards from array to eval</param>
+      /// <returns>int 1-7462, lower value is higher rank, 1=Royal Flush</returns>
       public int Eval(Card[] cards, int count=7) {
-         if (cards.Length<count)
-            return 0; // didn't get enough cards for requested eval
-
+         if (cards.Length<count) return 0; // didn't get enough cards for requested eval
+         if (count < 5) return 0; //can't eval less than 5 cards
+         if (count > 7) count = 7; //limit to 7 cards for eval
+         
          int suit_hash = 0;
          for(int i = 0;i<count;i++) // check for flush
             suit_hash+=SuitHasher[cards[i].ID];
@@ -13,14 +20,13 @@ namespace wyldePoker {
          if (suits[suit_hash] > 0) {        // if flush found, look up rank in flush table
             int[] suit_binary = new int[4]; //we use the lower 13 bits as a bit field for the 13 ranks
             for(int i = 0;i<count;i++)      // grab 2^(cardrank) from a table to avoid doing the math
-               suit_binary[cards[i].suit] |= RankBinary[cards[i].ID];
+               suit_binary[cards[i].Suit] |= RankBinary[cards[i].ID];
             return flush[suit_binary[suits[suit_hash] - 1]];
          }
 
-         // no flushes, build quinary (5-bit) hast table
-         byte[] quinary = new byte[13]; //basically keeps track of how many of each rank we have
-         for (int i = 0;i<count;i++)   //magic
-            quinary[(cards[i].rank)]++;
+         // no flushes, build quinary (base5) hast table
+         byte[] quinary = new byte[13]; //keeps track of how many of each rank (2-A) we have
+         for (int i = 0;i<count;i++) quinary[(cards[i].Rank)]++;
          
          // lookup rank in appropriate hash table based on # cards
          if (count>=7) { return noflush7[hash_quinary(quinary, 7)]; }
@@ -30,6 +36,7 @@ namespace wyldePoker {
 
       /*** Rank String Descriptors ***/
       #region /*******************************/
+
       public enum rank_category {
          // FIVE_OF_A_KIND = 0, // Reserved
          STRAIGHT_FLUSH = 1,
@@ -68,22 +75,38 @@ namespace wyldePoker {
          return rank_category.STRAIGHT_FLUSH;                    //   10 straight-flushes
       }
 
-      //short hand rank "Flush" "Straight" "Trips"
+      /// <summary>
+      /// Rank only string descriptor
+      /// </summary>
+      /// <param name="rank">Hand rank to lookup in table</param>
+      /// <returns>"Flush" "Straight" "Trips"</returns>
       public string handRank(int rank) {
          return rank_category_description[( int )rankCat(rank)]; 
       }
 
-      //long desc extra details "Flush (Ace High)" "Straight (5 High)" "Trips (10's)"
+      /// <summary>
+      /// Hand full string descriptor
+      /// </summary>
+      /// <param name="rank">Hand rank to lookup in table</param>
+      /// <returns>"[AJT74] Flush (Ace High)" "[5432A] Straight (5 High)" "[TTT74] Trips (10's)"</returns>
       public string handDesc(int rank) {
-         return handRank(rank)+" ("+rank_description[rank, 1]+")";
+         return "["+rank_description[rank, 0]+"] "+handRank(rank)+" ("+rank_description[rank, 1]+")";
       }
 
-      //short hand representation "AJT74" "5432A" "TTT74"
+      /// <summary>
+      /// 'Short-hand' hand representation
+      /// </summary>
+      /// <param name="rank">Hand rank to lookup in table</param>
+      /// <returns>"AJT74" "5432A" "TTT74"</returns>
       public string handNote(int rank) {
          return rank_description[rank, 0];
       }
 
-      //returns true/false for flush
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="rank">hand rank to check</param>
+      /// <returns>returns true/false for flush</returns>
       public bool isFlush(int rank) {
          switch (rankCat(rank)) {
             case rank_category.STRAIGHT_FLUSH:
@@ -93,6 +116,7 @@ namespace wyldePoker {
                return false;
          }
       }
+
       #endregion /* Rank String Descriptors */
    }
 }

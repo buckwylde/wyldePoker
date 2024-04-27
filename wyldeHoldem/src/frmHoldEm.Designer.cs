@@ -15,6 +15,7 @@
       {
          if (disposing && (components != null))
          {
+            pfc.Dispose();
             components.Dispose();
          }
          base.Dispose(disposing);
