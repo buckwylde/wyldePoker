@@ -29,6 +29,15 @@ namespace wyldePoker {
       /// <param name="count">5-7, number of cards from array to eval</param>
       /// <returns>int 1-7462, lower value is higher rank, 1=Royal Flush</returns>
       public int Eval(Card[] cards, int count=7) {
+
+         /* The big refactor
+          * Condensed the three evaluate5,6, & 7 functions into one
+          * Condensed param list from 5,6, or 7 ints from those functions
+          * into an array of cards and count. This allowed for iterative
+          * for loops to simplify code instead of chunks of assignments
+          * for 5,6, or 7 ints.
+          */
+
          if (cards.Length<count) return 0; // didn't get enough cards for requested eval
          if (count < 5) return 0; //can't eval less than 5 cards
          if (count > 7) count = 7; //limit to 7 cards for eval
