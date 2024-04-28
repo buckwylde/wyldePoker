@@ -17,7 +17,7 @@ High card	23294460	17.41191958	4.74:1
 Sample hands dealt by WyldePoker random generator and shuffle algorithm
 all hands dealt are added to totals, not just winning hand:
 
-Expected	holdem 5 players 20K 	holdem 10 players 15K 	holdem 10 players 100K iterations
+Expected	holdem 5 players 20K 		holdem 10 players 15K 		holdem 10 players 100K iterations
 00.03%		   27 (00.02%) 			   45 (00.03%)			   303 (00.03%) - Straight Flush
 00.16%		  162 (00.16%) 			  229 (00.15%)			  1651 (00.16%) - Quads
 02.59%		 2675 (02.67%) 			 4015 (02.67%)			 26176 (02.61%) - Full House
@@ -27,4 +27,4 @@ Expected	holdem 5 players 20K 	holdem 10 players 15K 	holdem 10 players 100K ite
 23.49%		23633 (23.63%) 			35669 (23.77%)			236022 (23.60%) - Two Pair
 43.82%		43724 (43.72%) 			65459 (43.63%)			437671 (43.76%) - Pair
 17.41%		17114 (17.11%) 			26087 (17.39%)			173684 (17.36%) - High Car%d
-			100005 - Total Hands	150000 - Total Hands	1000000 - Total Hands
+		100005 - Total Hands		150000 - Total Hands		1000000 - Total Hands
