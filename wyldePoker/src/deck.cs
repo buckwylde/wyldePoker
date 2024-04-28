@@ -6,13 +6,20 @@ namespace wyldePoker {
 
       RandomNumberGenerator rnd = RandomNumberGenerator.Create();
 
-      public int rndInt(int min, int max) {
+      /// <summary>
+      /// Returns a more mathmatically sound random than Random.Next()
+      /// </summary>
+      /// <param name="max">int<=(2^32)-1</param>
+      /// <param name="min">int>=0</param>
+      /// <returns>int min<=x<=max </returns>
+      public int rndInt(int max, int min=0) {
          byte[] rbytes = new byte[4];
          rnd.GetBytes(rbytes);
-
+         //convert random bytes to uint32 then div by (2^32)-1 to convert to double [0,1)
+         //do this instead of BitConverter.ToDouble to avoid negatives and constrain 0-1
          double dTmp = (double)BitConverter.ToUInt32(rbytes, 0) / 0xFFFFFFFF;
 
-         return (( int )(dTmp*((max+1)-min)+min));
+         return ((int)(dTmp * ((max+1) - min) + min));
       }
 
       private int dealpos = 0;
@@ -22,6 +29,28 @@ namespace wyldePoker {
          for (int i = 0;i<52;i++) {
             cards[i] = new Card(i);
          }
+      }
+
+      ~Deck() { //finalizer
+         rnd.Dispose();
+      }
+
+      /// <summary>
+      /// Prints out entire deck into 4 rows and 13 columns
+      /// </summary>
+      /// <returns>String representation of entire deck</returns>
+      public override string ToString() {
+         string sOut = "";
+
+         for (int i = 0; i<4; i++) {
+            for (int j = 0; j<13; j++) {
+               sOut += cards[i*13 + j].ToString() + " ";
+            }
+            sOut = sOut.Trim() + "\r\n";
+         }
+         sOut = sOut.Trim() + "\r\n";
+
+         return sOut;
       }
 
       /// <summary>

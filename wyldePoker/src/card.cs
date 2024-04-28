@@ -1,6 +1,6 @@
 ﻿namespace wyldePoker {
    public class Card {
-      //strCard[53]
+      //strCard[52]
       private static string[] strCard = {
          "2c","2d","2h","2s",
          "3c","3d","3h","3s",
@@ -14,8 +14,7 @@
          "Jc","Jd","Jh","Js",
          "Qc","Qd","Qh","Qs",
          "Kc","Kd","Kh","Ks",
-         "Ac","Ad","Ah","As",
-         "--"
+         "Ac","Ad","Ah","As"
       };
 
       private int id = 0;
@@ -38,7 +37,7 @@
             case 's':
                id = 3; break;
             default:
-               id = 53; break;
+               id = 255; break;//suit char not recognized, set to unknown
          }
 
          switch (name[0]) {
@@ -74,7 +73,7 @@
             case 'a':
                id += 48; break;
             default:
-               id += 53; break;
+               id = 255; break;
          }
       }
 
@@ -82,7 +81,10 @@
       /// ToString override
       /// </summary>
       /// <returns>"Ah" "Ks" "5d" "3c"</returns>
-      public override string ToString() { return strCard[id]; }
+      public override string ToString() { 
+         if (id<52) return strCard[id];
+         return "--";
+      }
 
       /// <summary>
       /// Readonly property for the int card ID

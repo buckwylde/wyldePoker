@@ -2,11 +2,31 @@ namespace wyldePoker {
 
    public partial class HandEvaluator {
 
+      //pure math black magic - Voldemort level
+      private int hash_quinary(byte[] q, int k) {
+
+         int sum = 0;
+         const int len = 13;
+
+         for (int i = 0;i < len;i++) {       //loops thru all card ranks 0-12
+            sum += dp[q[i], len - i - 1, k]; //dp[how many cards of rank i we have,12-i,#cards being eval'd]
+
+            //statements below provide for an early exit from the loop if we have found all k cards
+            //left over from the C code, probably in an effort for as much speed as possible
+            //left it in cuz no reason to slow down on purpose...
+            k -= q[i];
+            if (k <= 0)
+               break;
+         }
+         return sum;
+      }
+
+
       /// <summary>
       /// The hand evaluation function
       /// </summary>
-      /// <param name="cards">Arrary of card objects to eval</param>
-      /// <param name="count">5 to 7, number of cards from array to eval</param>
+      /// <param name="cards">Function starts with index 0</param>
+      /// <param name="count">5-7, number of cards from array to eval</param>
       /// <returns>int 1-7462, lower value is higher rank, 1=Royal Flush</returns>
       public int Eval(Card[] cards, int count=7) {
          if (cards.Length<count) return 0; // didn't get enough cards for requested eval
@@ -24,7 +44,7 @@ namespace wyldePoker {
             return flush[suit_binary[suits[suit_hash] - 1]];
          }
 
-         // no flushes, build quinary (base5) hast table
+         // no flushes, build quinary (base5) hash table
          byte[] quinary = new byte[13]; //keeps track of how many of each rank (2-A) we have
          for (int i = 0;i<count;i++) quinary[(cards[i].Rank)]++;
          
@@ -38,7 +58,7 @@ namespace wyldePoker {
       #region /*******************************/
 
       public enum rank_category {
-         // FIVE_OF_A_KIND = 0, // Reserved
+         ROYAL = 0, // Reserved
          STRAIGHT_FLUSH = 1,
          QUADS,
          FULL_HOUSE,
@@ -50,8 +70,21 @@ namespace wyldePoker {
          HIGH_CARD
       };
 
-      private static string[] rank_category_description = {
-         "",
+      public rank_category rankCat(int rank) {
+         if (rank > 6185) return rank_category.HIGH_CARD;   // 1277 high card
+         if (rank > 3325) return rank_category.ONE_PAIR;    // 2860 one pair
+         if (rank > 2467) return rank_category.TWO_PAIR;    //  858 two pair
+         if (rank > 1609) return rank_category.TRIPS;       //  858 three-kind
+         if (rank > 1599) return rank_category.STRAIGHT;    //   10 straights
+         if (rank > 322) return rank_category.FLUSH;        // 1277 flushes
+         if (rank > 166) return rank_category.FULL_HOUSE;   //  156 full house
+         if (rank > 10) return rank_category.QUADS;         //  156 four-kind
+         if (rank > 1) return rank_category.STRAIGHT_FLUSH; //    9 straight-flushes
+         return rank_category.ROYAL;                        //    1 royal flush
+      }
+
+      public static string[] strHandRankEnum = {
+         "Royal Flush",
          "Straight Flush",
          "Quads",
          "Full House",
@@ -63,25 +96,13 @@ namespace wyldePoker {
          "High Card",
       };
 
-      private rank_category rankCat(int rank) {
-         if (rank > 6185) return rank_category.HIGH_CARD;        // 1277 high card
-         if (rank > 3325) return rank_category.ONE_PAIR;         // 2860 one pair
-         if (rank > 2467) return rank_category.TWO_PAIR;         //  858 two pair
-         if (rank > 1609) return rank_category.TRIPS;  //  858 three-kind
-         if (rank > 1599) return rank_category.STRAIGHT;         //   10 straights
-         if (rank > 322) return rank_category.FLUSH;            // 1277 flushes
-         if (rank > 166) return rank_category.FULL_HOUSE;       //  156 full house
-         if (rank > 10) return rank_category.QUADS;   //  156 four-kind
-         return rank_category.STRAIGHT_FLUSH;                    //   10 straight-flushes
-      }
-
       /// <summary>
       /// Rank only string descriptor
       /// </summary>
       /// <param name="rank">Hand rank to lookup in table</param>
       /// <returns>"Flush" "Straight" "Trips"</returns>
       public string handRank(int rank) {
-         return rank_category_description[( int )rankCat(rank)]; 
+         return strHandRankEnum[( int )rankCat(rank)]; 
       }
 
       /// <summary>

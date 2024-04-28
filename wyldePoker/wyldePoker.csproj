@@ -45,11 +45,7 @@
     <Compile Include="src\card.cs" />
     <Compile Include="src\dealer.cs" />
     <Compile Include="src\deck.cs" />
-    <Compile Include="src\HT.cs" />
-    <Compile Include="src\HT5.cs" />
-    <Compile Include="src\HT6.cs" />
-    <Compile Include="src\HT7.cs" />
-    <Compile Include="src\HTF.cs" />
+    <Compile Include="src\hashtables.cs" />
     <Compile Include="src\rankstrings.cs" />
     <Compile Include="src\cardtable.cs" />
     <Compile Include="src\wpeval.cs" />

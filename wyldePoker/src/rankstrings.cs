@@ -4,7 +4,7 @@ namespace wyldePoker {
       /* I have heavily condensed the descriptions here to just be
        * an extension of the following string[]
             private static string[] rank_category_description = {
-               "",
+               "Royal Flush",
                "Straight Flush",
                "Quads",
                "Full House",
@@ -15,12 +15,11 @@ namespace wyldePoker {
                "Pair",
                "High Card",
             };
-
        */
       // rank_description[7643,2]
       private string[,] rank_description = {
         {"" ,"",},
-        {"AKQJT" ,"Royal",},
+        {"AKQJT" ,"",},
         {"KQJT9" ,"K High",},
         {"QJT98" ,"Q High",},
         {"JT987" ,"J High",},
