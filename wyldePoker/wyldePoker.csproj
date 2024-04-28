@@ -43,11 +43,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\card.cs" />
-    <Compile Include="src\dealer.cs" />
     <Compile Include="src\deck.cs" />
     <Compile Include="src\hashtables.cs" />
     <Compile Include="src\rankstrings.cs" />
-    <Compile Include="src\cardtable.cs" />
     <Compile Include="src\wpeval.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
