@@ -15,7 +15,7 @@ Pair		58627800	43.82254574	1.28:1
 High card	23294460	17.41191958	4.74:1
 
 Sample hands dealt by WyldePoker random generator and shuffle algorithm
-all hands are added totals, not just winning hand:
+all hands dealt are added to totals, not just winning hand:
 
 Expected	holdem 5 players 20K 	holdem 10 players 15K 	holdem 10 players 100K iterations
 00.03%		   27 (00.02%) 			   45 (00.03%)			   303 (00.03%) - Straight Flush
