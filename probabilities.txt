@@ -3,7 +3,7 @@ https://www.pokerstrategy.com/strategy/various-poker/texas-holdem-probabilities/
 # Probability of making a specific hand (7 out of 52)
 
 Hand		# of poss	% hit		Odds
-Royal Flush	4324		0.003232062	30939:1		*my code doesn't differentiate between straight flush and royal flush
+Royal Flush	4324		0.003232062	30939:1		*at the time my code doesn't differentiate between straight flush and royal flush
 Str Flush	37260		0.027850748	3589.57:1	*so I add these two percentages together for comparisons below
 Quads		224848		0.168067227	594:1
 Full House	3473184		2.596102271	37.52:1
