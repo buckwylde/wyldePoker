@@ -14,15 +14,14 @@ namespace wyldeHoldem {
       private PrivateFontCollection pfc = new PrivateFontCollection();
       //chart stuff
       private int[] rankcounter = new int[10];
-      private static string[] x = { "StrFl", "Quad", "FHse", "Flsh", "Str", "Trip", "2 Pr", "Pair", "HC" };
-      private int handcount =0;
+      private int handcount = 0;
 
       public frmHoldEm() { // constructor
          
          InitializeComponent();
 
-         pfc.AddFontFile(Application.StartupPath + "\\ComicMono.ttf");
-         textBox1.Font = new Font(pfc.Families[0], 12, FontStyle.Regular);
+         pfc.AddFontFile(Application.StartupPath + "\\FiraCode-Regular.ttf");
+         textBox1.Font = new Font(pfc.Families[0], 10, FontStyle.Regular);
          textBox1.Clear();
 
       }
@@ -34,7 +33,7 @@ namespace wyldeHoldem {
       private void BtnTest_Click(object sender, System.EventArgs e) {
 
          int PlayerCount = 6;       //# players to deal in
-         int rank;                  //used to store hand rank
+         int[] rank = new int[PlayerCount];                  //used to store hand rank
          Card[] hand = new Card[7]; //array of 7 card obj's that represent the hand to evaluate
          string sOut = "";          //interim output string, so we're not modifying a text box directly
 
@@ -43,39 +42,43 @@ namespace wyldeHoldem {
          //grab table cards from deck, store in hand[2-6]
          sOut+= "[";
          for (int j = 0;j<5;j++) {
-            sOut += deck.cards[PlayerCount*2 + j]+" ";
-            hand[2+j]=deck.cards[PlayerCount*2 + j];
+            sOut += deck.Cards[PlayerCount*2 + j]+" ";
+            hand[2+j]=deck.Cards[PlayerCount*2 + j];
          }
          sOut = sOut.Trim() + "]\r\n";
 
-         //build 7 card hand from each players hole cards and the table cards
+         int count = 0; int win = 9999; bool split = false;
          for (int i = 0;i<PlayerCount;i++) {
-            hand[0]=deck.cards[i];
-            hand[1]=deck.cards[i+PlayerCount];
-            sOut += "[" + hand[0] + " " + hand[1] + "] ";
-            rank = eval.Eval(hand, 7);
-            sOut += "<"+eval.handNote(rank)+"> "+eval.handRank(rank)+"\r\n";
+            hand[0]=deck.Cards[i];
+            hand[1]=deck.Cards[i+PlayerCount];
+            rank[i]=eval.Eval(hand, 7);
+            if (rank[i]==win) { count++; }
+            if (rank[i]<win) { win = rank[i]; count=1; }
+            rankcounter[( int )eval.rankCat(rank[i])]++;
+         }
+         if (count>1) { split = true; }
 
-            //int handrank = ( int )eval.rankCat(rank)-1;
-            rankcounter[( int )eval.rankCat(rank)]++;
+         for (int i = 0;i<PlayerCount;i++) {
+            sOut += "[" + deck.Cards[i] + " " + deck.Cards[i+PlayerCount] + "] ";
+            sOut += (eval.isFlush(rank[i]) ? "+" : " ") + eval.handNote(rank[i])+" => ";
+            sOut += eval.handRank(rank[i],true) + ( (rank[i]==win) ? (split ? "  SPLIT" : " |>WIN<|") : "" );
+            sOut += "\r\n";
          }
 
          handcount+=PlayerCount; //deal a hand to each player
 
          textBox1.Clear();
          for (int i = 0;i<10;i++) {
-            textBox1.Text += (rankcounter[i].ToString("0 (") + (( double )rankcounter[i]/handcount).ToString("0.####%) - ") + HandEvaluator.strHandRankEnum[i] + "\r\n");
+            textBox1.Text += (( double )rankcounter[i]/handcount).ToString("00.00% - ") + HandEvaluator.StrHandRankEnum[i,1] + "\r\n";
          }
          textBox1.Text+= handcount.ToString() + " - Total Hands\r\n";
 
-
          textBox1.Text += sOut;
-
       }
 
       private void btnChunk_Click(object sender, System.EventArgs e) {
          textBox1.Clear();
-         for (int i = 0;i<100000;i++) {
+         for (int i = 0;i<1000;i++) {
             BtnTest_Click(sender, e);
             this.Update();
          }

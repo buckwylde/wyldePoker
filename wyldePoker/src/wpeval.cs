@@ -1,4 +1,237 @@
+using System.Security.Cryptography;
+using System;
+
 namespace wyldePoker {
+
+   public class RNG {
+      RandomNumberGenerator rnd;
+      
+      //constructor
+      public RNG() { rnd = RandomNumberGenerator.Create(); }
+      //destructor
+      ~RNG() { rnd.Dispose(); }
+      /// <summary>
+      /// Returns a more mathematically sound random than Random.NextDouble()
+      /// </summary>
+      /// <param name="max"></param>
+      /// <param name="min"></param>
+      /// <returns></returns>
+      public double getDbl(double max = 1.0, double min = 0.0) {
+         byte[] rbytes = new byte[4];
+         rnd.GetBytes(rbytes);
+         return (max-min)*(( double )BitConverter.ToUInt32(rbytes, 0) / 0xFFFFFFFF) + min;
+      }
+      /// <summary>
+      /// Returns a more mathmatically sound random than Random.Next()
+      /// </summary>
+      /// <param name="max">int<=(2^32)-1</param>
+      /// <param name="min">int>=0</param>
+      /// <returns>int min<=x<=max </returns>
+      public int getInt32(int max = 100, int min = 0) {
+         return (( int )(getDbl() * ((max+1) - min) + min));
+      }
+   }
+
+   public class Card {
+      //strCard[52]
+      private static string[] strCard = {
+         "2c","2d","2h","2s",
+         "3c","3d","3h","3s",
+         "4c","4d","4h","4s",
+         "5c","5d","5h","5s",
+         "6c","6d","6h","6s",
+         "7c","7d","7h","7s",
+         "8c","8d","8h","8s",
+         "9c","9d","9h","9s",
+         "Tc","Td","Th","Ts",
+         "Jc","Jd","Jh","Js",
+         "Qc","Qd","Qh","Qs",
+         "Kc","Kd","Kh","Ks",
+         "Ac","Ad","Ah","As"
+      };
+
+      private int id = 0;
+
+      //constructors
+      public Card(int x) { id = x; }
+      public Card(string name) {
+         id = 0;
+         switch (name[1]) {
+            case 'C':
+            case 'c':
+               id = 0; break;//not really needed, kept in for completion
+            case 'D':
+            case 'd':
+               id = 1; break;
+            case 'H':
+            case 'h':
+               id = 2; break;
+            case 'S':
+            case 's':
+               id = 3; break;
+            default:
+               id = 255; break;//suit char not recognized, set to unknown
+         }
+
+         switch (name[0]) {
+            case '2':
+               id += 0; break;//not really needed, kept for completion
+            case '3':
+               id += 4; break;
+            case '4':
+               id += 8; break;
+            case '5':
+               id += 12; break;
+            case '6':
+               id += 16; break;
+            case '7':
+               id += 20; break;
+            case '8':
+               id += 24; break;
+            case '9':
+               id += 28; break;
+            case 'T':
+            case 't':
+               id += 32; break;
+            case 'J':
+            case 'j':
+               id += 36; break;
+            case 'Q':
+            case 'q':
+               id += 40; break;
+            case 'K':
+            case 'k':
+               id += 44; break;
+            case 'A':
+            case 'a':
+               id += 48; break;
+            default:
+               id = 255; break;
+         }
+      }
+
+      /// <summary>
+      /// ToString override
+      /// </summary>
+      /// <returns>"Ah" "Ks" "5d" "3c"</returns>
+      public override string ToString() {
+         if (id<52) return strCard[id];
+         return "--";
+      }
+
+      /// <summary>
+      /// Readonly property for the int card ID
+      /// </summary>
+      public int ID { get => id; }
+
+      /// <summary>
+      /// Returns int 0-3 for card suit, c,d,h,s 
+      /// </summary>
+      public int Suit { get => id & 0x3; }
+
+      /// <summary>
+      /// Returns int 0-12 for card rank, 2-A
+      /// </summary>
+      public int Rank { get => id / 4; }
+   }
+
+   public class Deck {
+
+      private int dealpos = 0;
+      private Card[] cards = new Card[52];
+      private readonly RNG rng = new RNG();
+
+      public Card[] Cards { get => cards; set => cards=value; }
+
+      public Deck() { //constructor
+         for (int i = 0;i<52;i++) {
+            Cards[i] = new Card(i);
+         }
+      }
+
+      /// <summary>
+      /// Prints out entire deck into 4 rows and 13 columns
+      /// </summary>
+      /// <returns>String representation of entire deck</returns>
+      public override string ToString() {
+         string sOut = "";
+
+         for (int i = 0;i<4;i++) {
+            for (int j = 0;j<13;j++) {
+               sOut += Cards[i*13 + j].ToString() + " ";
+            }
+            sOut = sOut.Trim() + "\r\n";
+         }
+         sOut = sOut.Trim() + "\r\n";
+
+         return sOut;
+      }
+
+      /// <summary>
+      /// Shuffles the deck
+      /// </summary>
+      public void Shuffle() {
+
+         int p1 = 0; int p2 = 0;
+         Card card = new Card(0);
+         Deck deck = new Deck();
+
+         //shuffle:pick 2 random cards and swap their positions 1040 times
+         for (int i = 0;i<1040;i++) {
+            p1 = rng.getInt32(0, 51); p2 = rng.getInt32(0, 51);
+            card = Cards[p1];       //pull card1 out
+            Cards[p1] = Cards[p2];  //put card2 where card1 was
+            Cards[p2] = card;       //put card1 where card2 was
+         }
+
+         //bridge shuffle
+         for (int i = 0;i<26;i++) {
+            deck.Cards[i*2] = Cards[i];
+            deck.Cards[i*2+1] = Cards[26+i];
+         }
+
+         //table cut
+         p1 = rng.getInt32(0, 51);
+         for (int i = 0;i<52;i++) {
+            Cards[i] = deck.Cards[p1];
+            p1++;
+            if (p1>51) p1 = 0;
+         }
+
+         //random swap shuffle again
+         for (int i = 0;i<1040;i++) {
+            p1 = rng.getInt32(0, 51); p2 = rng.getInt32(0, 51);
+            card = Cards[p1];       //pull card1 out
+            Cards[p1] = Cards[p2];  //put card2 where card1 was
+            Cards[p2] = card;       //put card1 where card2 was
+         }
+
+         //bridge shuffle
+         for (int i = 0;i<26;i++) {
+            deck.Cards[i*2] = Cards[i];
+            deck.Cards[i*2+1] = Cards[26+i];
+         }
+
+         //table cut
+         p1 = rng.getInt32(0, 51);
+         for (int i = 0;i<52;i++) {
+            Cards[i] = deck.Cards[p1];
+            p1++;
+            if (p1>51) p1 = 0;
+         }
+
+         dealpos = 0;
+      }
+
+      /// <summary>
+      /// Deals one card from top of deck
+      /// </summary>
+      /// <returns>Card object equal to cards[dealpos]</returns>
+      public Card nextCard() {
+         dealpos++;
+         return Cards[dealpos-1];
+      }
+   }
 
    public partial class HandEvaluator {
 
@@ -92,26 +325,28 @@ namespace wyldePoker {
          return rank_category.ROYAL;                        //    1 royal flush
       }
 
-      public static string[] strHandRankEnum = {
-         "Royal Flush",
-         "Straight Flush",
-         "Quads",
-         "Full House",
-         "Flush",
-         "Straight",
-         "Trips",
-         "Two Pair",
-         "Pair",
-         "High Card",
+      private static string[,] strHandRankEnum = {
+         {"Royal Flush", "RF" },
+         {"Straight Flush", "SF" },
+         {"Quads", "4K" },
+         {"Full House", "FH" },
+         {"Flush", "FL" },
+         {"Straight", "ST" },
+         {"Trips", "3K" },
+         {"Two Pair", "2P" },
+         {"Pair", "PR" },
+         {"High Card", "HC" }
       };
+
+      public static string[,] StrHandRankEnum { get => strHandRankEnum; }// set => strHandRankEnum=value; }
 
       /// <summary>
       /// Rank only string descriptor
       /// </summary>
       /// <param name="rank">Hand rank to lookup in table</param>
       /// <returns>"Flush" "Straight" "Trips"</returns>
-      public string handRank(int rank) {
-         return strHandRankEnum[( int )rankCat(rank)]; 
+      public string handRank(int rank, bool abbr = false) {
+         return StrHandRankEnum[( int )rankCat(rank),abbr?1:0]; 
       }
 
       /// <summary>
@@ -149,4 +384,5 @@ namespace wyldePoker {
 
       #endregion /* Rank String Descriptors */
    }
+
 }

@@ -42,7 +42,7 @@
          this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-         this.textBox1.Font = new System.Drawing.Font("Comic Mono", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+         this.textBox1.Font = new System.Drawing.Font("Fira Code", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
          this.textBox1.Location = new System.Drawing.Point(5, 5);
          this.textBox1.Margin = new System.Windows.Forms.Padding(1);
          this.textBox1.Multiline = true;
@@ -72,7 +72,7 @@
          this.btnChunk.Name = "btnChunk";
          this.btnChunk.Size = new System.Drawing.Size(140, 59);
          this.btnChunk.TabIndex = 2;
-         this.btnChunk.Text = "10K Chunk";
+         this.btnChunk.Text = "1K Chunk";
          this.btnChunk.UseVisualStyleBackColor = true;
          this.btnChunk.Click += new System.EventHandler(this.btnChunk_Click);
          // 
