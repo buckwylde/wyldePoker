@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
+
 using wyldePoker;
 
 namespace wyldeHoldem {
@@ -12,7 +12,8 @@ namespace wyldeHoldem {
       private Deck deck = new Deck();
       private HandEvaluator eval = new HandEvaluator();
       private PrivateFontCollection pfc = new PrivateFontCollection();
-      //chart stuff
+      
+      // stat stuff
       private int[] rankcounter = new int[10];
       private int handcount = 0;
 
@@ -20,10 +21,12 @@ namespace wyldeHoldem {
          
          InitializeComponent();
 
-         pfc.AddFontFile(Application.StartupPath + "\\FiraCode-Regular.ttf");
-         textBox1.Font = new Font(pfc.Families[0], 10, FontStyle.Regular);
+         string fnFont = Application.StartupPath + "\\FiraCode-Regular.ttf";
+         if (System.IO.File.Exists(fnFont)) {
+            pfc.AddFontFile(fnFont);
+            textBox1.Font = new Font(pfc.Families[0], 10, FontStyle.Regular);
+         }
          textBox1.Clear();
-
       }
 
       private void frmHoldEm_Load(object sender, System.EventArgs e) {
@@ -33,7 +36,7 @@ namespace wyldeHoldem {
       private void BtnTest_Click(object sender, System.EventArgs e) {
 
          int PlayerCount = 6;       //# players to deal in
-         int[] rank = new int[PlayerCount];                  //used to store hand rank
+         int[] rank = new int[PlayerCount]; //used to store hand rank
          Card[] hand = new Card[7]; //array of 7 card obj's that represent the hand to evaluate
          string sOut = "";          //interim output string, so we're not modifying a text box directly
 
@@ -42,8 +45,19 @@ namespace wyldeHoldem {
          //grab table cards from deck, store in hand[2-6]
          sOut+= "[";
          for (int j = 0;j<5;j++) {
-            sOut += deck.Cards[PlayerCount*2 + j]+" ";
-            hand[2+j]=deck.Cards[PlayerCount*2 + j];
+            int offset = 0; //handles burning a card before flop, turn and river
+            switch (j) {
+               case 0://flop
+               case 1://flop
+               case 2://flop
+                  offset = 1; break;
+               case 3://turn
+                  offset = 2; break;
+               case 4://river
+                  offset = 3; break;
+            }
+            hand[2+j]=deck.Cards[PlayerCount*2 + j + offset];
+            sOut +=  hand[2+j]+" ";
          }
          sOut = sOut.Trim() + "]\r\n";
 
@@ -60,18 +74,23 @@ namespace wyldeHoldem {
 
          for (int i = 0;i<PlayerCount;i++) {
             sOut += "[" + deck.Cards[i] + " " + deck.Cards[i+PlayerCount] + "] ";
-            sOut += (eval.isFlush(rank[i]) ? "+" : " ") + eval.handNote(rank[i])+" => ";
-            sOut += eval.handRank(rank[i],true) + ( (rank[i]==win) ? (split ? "  SPLIT" : " |>WIN<|") : "" );
+            sOut += (eval.isFlush(rank[i]) ? "+" : " ") + eval.handNote(rank[i])+".";
+            sOut += eval.handRank(rank[i],true) + ( (rank[i]==win) ? (split ? "  SPLIT" : "  *WIN*") : "" );
             sOut += "\r\n";
          }
 
-         handcount+=PlayerCount; //deal a hand to each player
+         handcount++; //deal a hand to each player
 
+         string sFmt = string.Empty;
          textBox1.Clear();
          for (int i = 0;i<10;i++) {
-            textBox1.Text += (( double )rankcounter[i]/handcount).ToString("00.00% - ") + HandEvaluator.StrHandRankEnum[i,1] + "\r\n";
+            if (i<=1) sFmt="-0.000% "; else sFmt="-00.00% ";
+            textBox1.Text += HandEvaluator.StrHandRankEnum[i, 1] + (( double )rankcounter[i]/(handcount*PlayerCount)).ToString(sFmt);
+            if (i==4) textBox1.Text+="\r\n";
          }
-         textBox1.Text+= handcount.ToString() + " - Total Hands\r\n";
+         textBox1.Text+="\r\n";
+
+         textBox1.Text+= handcount.ToString() + " - Hands @" +PlayerCount.ToString()+ " players/hand\r\n";
 
          textBox1.Text += sOut;
       }
@@ -90,6 +109,11 @@ namespace wyldeHoldem {
 
       private void checkBox1_CheckedChanged(object sender, EventArgs e) {
          timer1.Enabled= checkBox1.Checked;
+      }
+
+      private void textBox1_DoubleClick(object sender, EventArgs e) {
+         cryptoRNG rng = new cryptoRNG();
+         textBox1.Text += rng.getString(50)+"\r\n";
       }
    }
 }

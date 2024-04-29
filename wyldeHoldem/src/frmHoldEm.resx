@@ -118,29 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="textBox1.Text" xml:space="preserve">
-    <value>0 (0%) - Royal Flush
-0 (0%) - Straight Flush
-0 (0%) - Quads
-0 (0%) - Full House
-0 (0%) - Flush
-0 (0%) - Straight
-3 (30%) - Trips
-2 (20%) - Two Pair
-5 (50%) - Pair
-0 (0%) - High Card
-10 - Total Hands
-[3d 8s 2s Jh Ts]
-[7d 6d] &lt;JT876&gt; High Card
-[8c 3s] &lt;8833J&gt; Two Pair
-[2h Th] &lt;TT22J&gt; Two Pair
-[8h Qc] &lt;88QJT&gt; Pair
-[Kd 7h] &lt;KJT87&gt; High Card
-[Kh 4d] &lt;KJT84&gt; High Card
-[Tc 2d] &lt;TT22J&gt; Two Pair
-[Qd Ac] &lt;AQJT8&gt; High Card
-[Td Ah] &lt;TTAJ8&gt; Pair
-[7c As] &lt;AJT87&gt; High Card
-</value>
+    <value>RF-0.000% SF-00.00% 4K-00.00% FH-00.00% FL-16.67% 
+ST-00.00% 3K-16.67% 2P-16.67% PR-50.00% HC-00.00% 
+6 - Total Hands
+[Td 2d 9h 3d Tc]
+[7c 5s]  TT975 =&gt; PR
+[Js 4h]  TTJ94 =&gt; PR
+[3s 4c]  TT339 =&gt; 2P
+[6h Kc]  TTK96 =&gt; PR
+[Ts 8h]  TTT98 =&gt; 3K
+[9d Ad] +AT932 =&gt; FL |&gt;WIN&lt;|</value>
   </data>
   <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

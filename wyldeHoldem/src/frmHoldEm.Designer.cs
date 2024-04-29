@@ -42,20 +42,23 @@
          this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-         this.textBox1.Font = new System.Drawing.Font("Fira Code", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+         this.textBox1.BackColor = System.Drawing.Color.Black;
+         this.textBox1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+         this.textBox1.ForeColor = System.Drawing.Color.Lime;
          this.textBox1.Location = new System.Drawing.Point(5, 5);
          this.textBox1.Margin = new System.Windows.Forms.Padding(1);
          this.textBox1.Multiline = true;
          this.textBox1.Name = "textBox1";
          this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-         this.textBox1.Size = new System.Drawing.Size(429, 406);
+         this.textBox1.Size = new System.Drawing.Size(494, 256);
          this.textBox1.TabIndex = 0;
          this.textBox1.Text = resources.GetString("textBox1.Text");
+         this.textBox1.DoubleClick += new System.EventHandler(this.textBox1_DoubleClick);
          // 
          // btnTest
          // 
          this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-         this.btnTest.Location = new System.Drawing.Point(295, 417);
+         this.btnTest.Location = new System.Drawing.Point(360, 267);
          this.btnTest.Margin = new System.Windows.Forms.Padding(1);
          this.btnTest.Name = "btnTest";
          this.btnTest.Size = new System.Drawing.Size(140, 59);
@@ -68,7 +71,7 @@
          // 
          this.btnChunk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
          this.btnChunk.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-         this.btnChunk.Location = new System.Drawing.Point(150, 417);
+         this.btnChunk.Location = new System.Drawing.Point(215, 267);
          this.btnChunk.Name = "btnChunk";
          this.btnChunk.Size = new System.Drawing.Size(140, 59);
          this.btnChunk.TabIndex = 2;
@@ -85,7 +88,7 @@
          // 
          this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
          this.checkBox1.Appearance = System.Windows.Forms.Appearance.Button;
-         this.checkBox1.Location = new System.Drawing.Point(5, 417);
+         this.checkBox1.Location = new System.Drawing.Point(70, 267);
          this.checkBox1.Name = "checkBox1";
          this.checkBox1.Size = new System.Drawing.Size(140, 59);
          this.checkBox1.TabIndex = 4;
@@ -98,14 +101,14 @@
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(444, 486);
+         this.ClientSize = new System.Drawing.Size(509, 336);
          this.Controls.Add(this.checkBox1);
          this.Controls.Add(this.btnChunk);
          this.Controls.Add(this.btnTest);
          this.Controls.Add(this.textBox1);
          this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
          this.Margin = new System.Windows.Forms.Padding(1);
-         this.MinimumSize = new System.Drawing.Size(460, 525);
+         this.MinimumSize = new System.Drawing.Size(525, 375);
          this.Name = "frmHoldEm";
          this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
          this.Text = "wyldePoker Test";

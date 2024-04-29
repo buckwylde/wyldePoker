@@ -1,34 +1,90 @@
-using System.Security.Cryptography;
 using System;
 
 namespace wyldePoker {
-
-   public class RNG {
-      RandomNumberGenerator rnd;
-      
+   
+   /// <summary>
+   /// Random number generator using System.Security.Cryptography
+   /// for random byte generation instead of System.Random
+   /// </summary>
+   public class cryptoRNG {
+      System.Security.Cryptography.RandomNumberGenerator rnd;
+   
       //constructor
-      public RNG() { rnd = RandomNumberGenerator.Create(); }
+      public cryptoRNG() { rnd = System.Security.Cryptography.RandomNumberGenerator.Create(); }
       //destructor
-      ~RNG() { rnd.Dispose(); }
+      ~cryptoRNG() { rnd.Dispose(); }
+
       /// <summary>
-      /// Returns a more mathematically sound random than Random.NextDouble()
+      /// Returns a cryptographically sound random number, superior in randomness to System.Random
       /// </summary>
       /// <param name="max"></param>
       /// <param name="min"></param>
-      /// <returns></returns>
+      /// <returns>Value of return type in range [<paramref name="min"/>, <paramref name="max"/>]</returns>
       public double getDbl(double max = 1.0, double min = 0.0) {
-         byte[] rbytes = new byte[4];
+         byte[] rbytes = new byte[8];
          rnd.GetBytes(rbytes);
-         return (max-min)*(( double )BitConverter.ToUInt32(rbytes, 0) / 0xFFFFFFFF) + min;
+         return (max-min)*(( double )BitConverter.ToUInt64(rbytes, 0) / 0xFFFFFFFFFFFFFFFF) + min;
+      }
+
+      /* Everything else calls getDbl and converts to whatever it needs */
+      /// <summary>
+      /// Returns a string of <paramref name="len"/> length composed of random characters from <paramref name="allowChar"/>
+      /// </summary>
+      /// <param name="len">Length of return string</param>
+      /// <param name="allowChar">String of allowable characters for return string</param>
+      /// <returns></returns>
+      public string getString(int len, string allowChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()/?,.;:[]_+-=") {
+         string sTmp = string.Empty;
+         for(int i = 0;i<len;i++) {
+            sTmp += allowChar[getUInt8(( byte )(allowChar.Length - 1))];
+         }
+         return sTmp;
       }
       /// <summary>
-      /// Returns a more mathmatically sound random than Random.Next()
+      /// Returns a cryptographically sound random number, superior in randomness to System.Random
       /// </summary>
-      /// <param name="max">int<=(2^32)-1</param>
-      /// <param name="min">int>=0</param>
-      /// <returns>int min<=x<=max </returns>
-      public int getInt32(int max = 100, int min = 0) {
-         return (( int )(getDbl() * ((max+1) - min) + min));
+      /// <param name="max"></param>
+      /// <param name="min"></param>
+      /// <returns>Value of return type in range [<paramref name="min"/>, <paramref name="max"/>]</returns>
+      public float getSgl(float max = 1, float min = 0) {
+         return (float)getDbl(max, min);
+      }
+      // UInt functions 8/16/32/64
+      /// <summary>
+      /// Returns a cryptographically sound random number, superior in randomness to System.Random
+      /// </summary>
+      /// <param name="max"></param>
+      /// <param name="min"></param>
+      /// <returns>Value of return type in range [<paramref name="min"/>, <paramref name="max"/>]</returns>
+      public byte getUInt8(byte max = 255, byte min = 0) {
+         return (( byte )(getDbl() * ((max+1) - min) + min));
+      }
+      /// <summary>
+      /// Returns a cryptographically sound random number, superior in randomness to System.Random
+      /// </summary>
+      /// <param name="max"></param>
+      /// <param name="min"></param>
+      /// <returns>Value of return type in range [<paramref name="min"/>, <paramref name="max"/>]</returns>
+      public ushort getUInt16(ushort max = 65535, ushort min = 0) {
+         return (( ushort )(getDbl() * ((max+1) - min) + min));
+      }
+      /// <summary>
+      /// Returns a cryptographically sound random number, superior in randomness to System.Random
+      /// </summary>
+      /// <param name="max"></param>
+      /// <param name="min"></param>
+      /// <returns>Value of return type in range [<paramref name="min"/>, <paramref name="max"/>]</returns>
+      public uint getUInt32(uint max = System.UInt32.MaxValue, uint min = 0) {
+         return (( uint )(getDbl() * ((max+1) - min) + min));
+      }
+      /// <summary>
+      /// Returns a cryptographically sound random number, superior in randomness to System.Random
+      /// </summary>
+      /// <param name="max"></param>
+      /// <param name="min"></param>
+      /// <returns>Value of return type in range [<paramref name="min"/>, <paramref name="max"/>]</returns>
+      public ulong getUInt64(ulong max = System.Int64.MaxValue, ulong min = 0) {
+         return (( ulong )(getDbl() * ((max+1) - min) + min));
       }
    }
 
@@ -50,7 +106,7 @@ namespace wyldePoker {
          "Ac","Ad","Ah","As"
       };
 
-      private int id = 0;
+      private int id = 0; // only way to set id is through constructors
 
       //constructors
       public Card(int x) { id = x; }
@@ -139,7 +195,7 @@ namespace wyldePoker {
 
       private int dealpos = 0;
       private Card[] cards = new Card[52];
-      private readonly RNG rng = new RNG();
+      private readonly cryptoRNG rng = new cryptoRNG();
 
       public Card[] Cards { get => cards; set => cards=value; }
 
@@ -172,35 +228,44 @@ namespace wyldePoker {
       /// </summary>
       public void Shuffle() {
 
-         int p1 = 0; int p2 = 0;
+         uint p1 = 0; uint p2 = 0;
          Card card = new Card(0);
          Deck deck = new Deck();
 
-         //shuffle:pick 2 random cards and swap their positions 1040 times
-         for (int i = 0;i<1040;i++) {
-            p1 = rng.getInt32(0, 51); p2 = rng.getInt32(0, 51);
+         //shuffle:pick 2 random cards and swap their positions
+         for (int i = 0;i<78;i++) {
+            p1 = rng.getUInt32(51); p2 = rng.getUInt32(51);
             card = Cards[p1];       //pull card1 out
             Cards[p1] = Cards[p2];  //put card2 where card1 was
             Cards[p2] = card;       //put card1 where card2 was
          }
 
-         //bridge shuffle
+         //bridge shuffle: result goes into local deck obj
          for (int i = 0;i<26;i++) {
             deck.Cards[i*2] = Cards[i];
             deck.Cards[i*2+1] = Cards[26+i];
          }
 
-         //table cut
-         p1 = rng.getInt32(0, 51);
+         //shuffle:pick 2 random cards and swap their positions
+         for (int i = 0;i<78;i++) {
+            p1 = rng.getUInt32(51); p2 = rng.getUInt32(51);
+            card = deck.Cards[p1];       //pull card1 out
+            deck.Cards[p1] = deck.Cards[p2];  //put card2 where card1 was
+            deck.Cards[p2] = card;       //put card1 where card2 was
+         }
+
+         //table cut: result goes into class level deck obj
+         p1 = rng.getUInt32(51);
          for (int i = 0;i<52;i++) {
             Cards[i] = deck.Cards[p1];
             p1++;
             if (p1>51) p1 = 0;
          }
 
+         /*
          //random swap shuffle again
          for (int i = 0;i<1040;i++) {
-            p1 = rng.getInt32(0, 51); p2 = rng.getInt32(0, 51);
+            p1 = rng.getUInt32(51); p2 = rng.getUInt32(51);
             card = Cards[p1];       //pull card1 out
             Cards[p1] = Cards[p2];  //put card2 where card1 was
             Cards[p2] = card;       //put card1 where card2 was
@@ -211,15 +276,15 @@ namespace wyldePoker {
             deck.Cards[i*2] = Cards[i];
             deck.Cards[i*2+1] = Cards[26+i];
          }
-
+         
          //table cut
-         p1 = rng.getInt32(0, 51);
+         p1 = rng.getUInt32(51);
          for (int i = 0;i<52;i++) {
             Cards[i] = deck.Cards[p1];
             p1++;
             if (p1>51) p1 = 0;
          }
-
+         */
          dealpos = 0;
       }
 
@@ -228,7 +293,7 @@ namespace wyldePoker {
       /// </summary>
       /// <returns>Card object equal to cards[dealpos]</returns>
       public Card nextCard() {
-         dealpos++;
+         if(dealpos<52) dealpos++;
          return Cards[dealpos-1];
       }
    }
