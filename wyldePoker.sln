@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wyldePokerTest", "wyldeHold
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wyldePoker", "wyldePoker\wyldePoker.csproj", "{896BB2CC-1C18-4978-958C-BF4649A9EC71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wyldeLOGIC", "wyldeLOGIC\wyldeLOGIC.csproj", "{845B95C9-FAC0-4103-82FE-50B0F523F7CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{896BB2CC-1C18-4978-958C-BF4649A9EC71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{896BB2CC-1C18-4978-958C-BF4649A9EC71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{896BB2CC-1C18-4978-958C-BF4649A9EC71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{845B95C9-FAC0-4103-82FE-50B0F523F7CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{845B95C9-FAC0-4103-82FE-50B0F523F7CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{845B95C9-FAC0-4103-82FE-50B0F523F7CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{845B95C9-FAC0-4103-82FE-50B0F523F7CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

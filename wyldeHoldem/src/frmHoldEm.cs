@@ -108,12 +108,12 @@ namespace wyldeHoldem {
       }
 
       private void checkBox1_CheckedChanged(object sender, EventArgs e) {
-         timer1.Enabled= checkBox1.Checked;
+         timer1.Enabled = checkBox1.Checked;
       }
 
       private void textBox1_DoubleClick(object sender, EventArgs e) {
-         cryptoRNG rng = new cryptoRNG();
-         textBox1.Text += rng.getString(50)+"\r\n";
+         wyldeLOGIC.wyldeRNG rng = new wyldeLOGIC.wyldeRNG();
+         textBox1.Text += rng.getGUID()+"\r\n";
       }
    }
 }

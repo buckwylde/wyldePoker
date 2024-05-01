@@ -47,5 +47,11 @@
     <Compile Include="src\rankstrings.cs" />
     <Compile Include="src\wpeval.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\wyldeLOGIC\wyldeLOGIC.csproj">
+      <Project>{845b95c9-fac0-4103-82fe-50b0f523f7ce}</Project>
+      <Name>wyldeLOGIC</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

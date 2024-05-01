@@ -1,7 +1,9 @@
-using System;
+
+using wyldeLOGIC;
 
 namespace wyldePoker {
-   
+
+/*   
    /// <summary>
    /// Random number generator using System.Security.Cryptography
    /// for random byte generation instead of System.Random
@@ -26,7 +28,7 @@ namespace wyldePoker {
          return (max-min)*(( double )BitConverter.ToUInt64(rbytes, 0) / 0xFFFFFFFFFFFFFFFF) + min;
       }
 
-      /* Everything else calls getDbl and converts to whatever it needs */
+      // Everything else calls getDbl and converts to whatever it needs
       /// <summary>
       /// Returns a string of <paramref name="len"/> length composed of random characters from <paramref name="allowChar"/>
       /// </summary>
@@ -87,6 +89,7 @@ namespace wyldePoker {
          return (( ulong )(getDbl() * ((max+1) - min) + min));
       }
    }
+*/
 
    public class Card {
       //strCard[52]
@@ -195,7 +198,7 @@ namespace wyldePoker {
 
       private int dealpos = 0;
       private Card[] cards = new Card[52];
-      private readonly cryptoRNG rng = new cryptoRNG();
+      private readonly wyldeLOGIC.wyldeRNG rng = new wyldeRNG();
 
       public Card[] Cards { get => cards; set => cards=value; }
 
