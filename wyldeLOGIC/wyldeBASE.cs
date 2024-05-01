@@ -67,7 +67,7 @@ namespace wyldeLOGIC {
       public override string ToString() {
          return Location;
       }
-   }
+   } // class wyldeFILEINFO
 
    public class wyldeSETTINGS {
 
@@ -122,6 +122,6 @@ namespace wyldeLOGIC {
          else settings.Add(key,val);
       }
 
-   } // class wyldeSettings
+   } // class wyldeSETTINGS
 
 } // namespace
