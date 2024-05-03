@@ -10,6 +10,7 @@ namespace wyldeLOGIC {
    /// <summary>
    /// RNG using System.Security.Cryptography.RandomNumberGenerator.GetBytes
    /// for random byte generation instead of System.Random.
+   /// 
    /// Generates 8 bytes, converts to UInt64, div by UInt64.MaxValue to convert
    /// to double and scale 0-1, then scale min to max - [0->1]*(max-min)+min
    /// </summary>
@@ -33,7 +34,7 @@ namespace wyldeLOGIC {
       public string getString(int len, string allowChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()/?,.;:[]_+-=") {
          string sTmp = string.Empty;// where we build our random string
          for (int i = 0;i<len;i++)
-            sTmp += allowChar[getUInt8(( byte )(allowChar.Length - 1))];// pick a random byte from our allowed characters
+            sTmp += allowChar[getUInt16(( byte )(allowChar.Length - 1))];// pick a random byte from our allowed characters
          return sTmp;
       }
       public string getGUID() { return getString(32, "0123456789ABCDEF"); }

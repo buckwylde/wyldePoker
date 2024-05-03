@@ -37,9 +37,9 @@ namespace wyldeHoldem {
 
          int PlayerCount = 6;       //# players to deal in
          int[] rank = new int[PlayerCount]; //used to store hand rank
-         Card[] hand = new Card[7]; //array of 7 card obj's that represent the hand to evaluate
+         Hand[] hands = new Hand[PlayerCount]; //array of 7 hand obj's that represent the hand to evaluate
          string sOut = "";          //interim output string, so we're not modifying a text box directly
-
+         Card[] table = new Card[5];
          deck.Shuffle();            //pull rainbows out of unicorn anuses
 
          //grab table cards from deck, store in hand[2-6]
@@ -56,16 +56,17 @@ namespace wyldeHoldem {
                case 4://river
                   offset = 3; break;
             }
-            hand[2+j]=deck.Cards[PlayerCount*2 + j + offset];
-            sOut +=  hand[2+j]+" ";
+            table[j]=deck.Cards[PlayerCount*2 + j + offset];
+            sOut +=  table[j]+" ";
          }
          sOut = sOut.Trim() + "]\r\n";
 
          int count = 0; int win = 9999; bool split = false;
          for (int i = 0;i<PlayerCount;i++) {
-            hand[0]=deck.Cards[i];
-            hand[1]=deck.Cards[i+PlayerCount];
-            rank[i]=eval.Eval(hand, 7);
+            hands[i] = new Hand(table);
+            hands[i].Add(deck.Cards[i]);
+            hands[i].Add(deck.Cards[i+PlayerCount]);
+            rank[i]=hands[i].Evaluate(); //eval.Eval(hand, 7);
             if (rank[i]==win) { count++; }
             if (rank[i]<win) { win = rank[i]; count=1; }
             rankcounter[( int )eval.rankCat(rank[i])]++;
@@ -113,7 +114,11 @@ namespace wyldeHoldem {
 
       private void textBox1_DoubleClick(object sender, EventArgs e) {
          wyldeLOGIC.wyldeRNG rng = new wyldeLOGIC.wyldeRNG();
-         textBox1.Text += rng.getGUID()+"\r\n";
+         string sTmp = rng.getGUID();
+         textBox1.Text += sTmp.Substring(0, 8) + "-" + 
+                           sTmp.Substring(8, 4) + "-" + 
+                           sTmp.Substring(12, 4) + "-" +
+                           sTmp.Substring(16) + "\r\n";
       }
    }
 }

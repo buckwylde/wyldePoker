@@ -1,4 +1,6 @@
 
+using System.ComponentModel;
+using System.Linq.Expressions;
 using wyldeLOGIC;
 
 namespace wyldePoker {
@@ -202,11 +204,12 @@ namespace wyldePoker {
 
       public Card[] Cards { get => cards; set => cards=value; }
 
-      public Deck() { //constructor
+      //constructor
+      public Deck() {
          for (int i = 0;i<52;i++) {
             Cards[i] = new Card(i);
          }
-      }
+      } //constructor
 
       /// <summary>
       /// Prints out entire deck into 4 rows and 13 columns
@@ -301,6 +304,43 @@ namespace wyldePoker {
       }
    }
 
+   public class Hand {
+      private wyldePoker.HandEvaluator e = new HandEvaluator();
+      private int rank = 9999;
+      private Card[] c = new Card[7];
+      private int count = 0;
+
+      public Hand(Card[] cards) {
+         int count = cards.Length;
+         if(count>7) count = 7;
+         for(int i = 0;i<count;i++) {
+            c[i] = cards[i];
+         }
+         this.count = count;
+      }
+
+      public string Rank { get { return e.handRank(rank); } }
+      public string RankAbbr { get { return e.handRank(rank, true); } }
+      public string Description { get { return e.handDesc(rank); } }
+      public Card[] card { get => c; }// set => c = value; }
+
+      public void Add(Card card) {
+         if (count<c.Length) {
+            c[count] = card;
+            count++;
+         }
+      }
+      public void Clear() {  c = new Card[7]; }
+
+      public int Evaluate() {
+         if (count>4) {
+            rank = e.Eval(c, count);
+         }
+         return rank;
+      }
+
+      }
+
    public partial class HandEvaluator {
 
       //pure math black magic - Voldemort level
@@ -331,9 +371,9 @@ namespace wyldePoker {
       /// <returns>int 1-7462, lower value is higher rank, 1=Royal Flush</returns>
       public int Eval(Card[] cards, int count=7) {
 
-         if (cards.Length<count) return 0; // didn't get enough cards for requested eval
          if (count < 5) return 0;          // can't eval less than 5 cards
          if (count > 7) count = 7;         // limit to 7 cards for eval
+         if (cards.Length<count) return 0; // didn't get enough cards for requested eval
          
          int suit_hash = 0;
          for(int i = 0;i<count;i++) // check for flush
